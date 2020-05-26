@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="jumbotron mt-4">
+            <h1 class="display-4 text-center text-md-left">Bienvenue sur Shine Consulting</h1>
+            <p class="lead text-center text-md-left">Voyagez partout dans le monde</p>
+            <hr class="my-4">
+            <p class="text-center text-md-left">Vous cherchez une location pour votre prochain voyage ?</p>
+            <p class="lead text-center text-md-left">
+                <a class="btn btn-primary btn-lg" href="{{ path('ad.index') }}" role="button">Découvrez ici toutes nos annonces</a>
+            </p>
+        </div>
+
+        <h2 class="my-5">Nos meilleures locations</h2>
+        <div class="row">
+            {% for data in ads %}
+                {% include 'ad/_list.html.twig' with {'ad': data.annonce} %}
+            {% endfor %}
+        </div>
+
+    </div>
+
+{% endblock %}

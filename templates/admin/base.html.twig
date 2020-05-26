@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - Admin Agence de voyages </title>
+
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    {{ encore_entry_link_tags('app') }}
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+{# Header Admin #}
+{{ include('admin/layout/header.html.twig') }}
+
+{% block body %}{% endblock %}
+
+{# Header Admin #}
+{{ include('admin/layout/footer.html.twig') }}
+
+{{ encore_entry_script_tags('app') }}
+{% block javascripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Réservation n° : {{ booking.id }} {% endblock %}
+
+{% block body %}
+
+    {% set ad = booking.ad %}
+    {% set author = ad.author %}
+
+    <div class="container">
+        <h1 class="my-5">Votre réservation n°{{ booking.id }}</h1>
+
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-info">
+                    <h2>Détails de votre réservation</h2>
+                    <hr>
+                    <dl class="row">
+                        <dt class="col-md-4">N°</dt>
+                        <dd class="col-md-8">{{ booking.id }}</dd>
+
+                        <dt class="col-md-4">Date d'arrivée</dt>
+                        <dd class="col-md-8">{{ booking.startDate | date('d/m/Y') }}</dd>
+
+                        <dt class="col-md-4">Date de départ</dt>
+                        <dd class="col-md-8">{{ booking.endDate | date('d/m/Y') }}</dd>
+
+                        <dt class="col-md-4">Nombre de nuits</dt>
+                        <dd class="col-md-8">{{ booking.duration }}</dd>
+
+                        <dt class="col-md-4">Montant total</dt>
+                        <dd class="col-md-8">{{ booking.amount | number_format(2, '.', ' ') }} &euro; </dd>
+
+                        <dt class="col-md-4">Commentaire</dt>
+                        <dd class="col-md-8">{{ booking.comment | default('Aucun commentaire') }}</dd>
+                    </dl>
+
+                    <hr>
+
+                    <h2 class="alert-heading">Détails de votre hôte</h2>
+                    <div class="row mb-4">
+                        <div class="col-3">
+                            <img src="{{asset('images/'~author.avatar)}}" alt="{{ author.fullName }}" class="avatar avatar-medium">
+                        </div>
+                        <div class="col-9">
+                            <h4>
+                                <a href="{{ path('user.show', {'slug': author.slug}) }}">{{ author.fullName }}</a>
+                            </h4>
+                            <span class="badge badge-primary">{{ author.ads | length }} annonce(s)</span>
+                        </div>
+                    </div>
+                    <p class="text-justify">{{ author.description }}</p>
+                    <a href="{{ path('user.show', {'slug': author.slug}) }}" class="btn btn-primary">En savoir plus sur {{ author.firstName }}</a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="alert alert-secondary">
+                    <h2>Votre hébergement</h2>
+                    <hr>
+
+                    <h4>
+                        <a href="{{ path('ad.show', {'slug': ad.slug}) }}">{{ ad.title }}</a>
+                    </h4>
+
+                    <img src="{{asset('images/'~ad.image)}}"  alt="{{ ad.title }}" class="img-fluid">
+
+                    <p>{{ ad.content }}</p>
+
+                    <a href="{{ path('ad.show', {'slug': ad.slug}) }}" class="btn btn-primary">En savoir plus sur cet hébergement</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-dark" id="comment">
+                  
+                        {% set comment = booking.ad.commentFromAuthor(app.user) %}
+                        {% if comment is not null %}
+                            <h2 class="alert-heading">Commentaire sur votre séjour</h2>
+                            <blockquote>
+                                {{ comment.content }}
+                            </blockquote>
+                            <strong>Note : {% include 'inc/rating.html.twig' with {'rating': comment.rating} %}</strong>
+                        {% else %}
+                            <h2 class="alert-heading">Donnez votre avis</h2>
+                            {{ form_start(form) }}
+                            {{ form_widget(form) }}
+                            <button type="submit" class="btn btn-success">Envoyer votre avis</button>
+                            {{ form_end(form) }}
+                        {% endif %}
+              
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

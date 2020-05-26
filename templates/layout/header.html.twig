@@ -1,0 +1,60 @@
+{# Navigation #}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ path('home') }}">Shine Consulting</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor03">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('home') }}">Accueil </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('ad.index') }}">Nos annonces </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if app.user %}
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="accountDropdownLink">
+                        <img src=" {{absolute_url(asset('images/' ~app.user.avatar))}}" class="avatar avatar-mini" alt="{{ app.user.fullName }}"> {{ app.user.fullName }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="{{ path('user.show', {'slug': app.user.slug}) }}">Mon Compte</a>
+                        {% if  not is_granted   ('ROLE_ADMIN') %}
+
+                        <a class="dropdown-item" href="{{ path('user.bookings') }}">Mes réservations</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="{{ path('user.profile') }}">Modifier mes données</a>
+                        <a class="dropdown-item" href="{{ path('user.password') }}">Modifier mon mot de passe</a>
+                        <div class="dropdown-divider"></div>
+                        {% if  is_granted   ('ROLE_ADMIN') %}
+
+                        <a class="dropdown-item" href="{{ path('ad.create') }}">Ajouter une annonce</a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('user.logout') }}">Se Déconnecter</a>
+                    </div>
+                </li>
+
+
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('user.login') }}">Mon Compte</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+{# Messages Flash #}
+{% for types, messages in app.flashes %}
+    <div class="container">
+        <div class="alert alert-{{ types }}">
+            {% for message in messages %}
+                <p class="m-0">{{ message | raw }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
